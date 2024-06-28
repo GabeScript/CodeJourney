@@ -3,32 +3,25 @@ import java.util.InputMismatchException;
 
 public class NewTemperatureCalculator {
 
-    static final int FAHRENHEIT_TO_CELSIUS = 1;
-    static final int CELSIUS_TO_FAHRENHEIT = 2;
-    static final double ROUNDING_FACTOR = 10.0;
+    static final int faherenheitToCelsius = 1;
+    static final int celsiusToFaherenheit = 2;
+    static final double roundingFactor = 10.0;
     static Scanner scan = new Scanner(System.in);
     public static void main(String[] args) {
-    
-        boolean continueCalculating = true;
+    	boolean continueCalculating = true;
 
-        while (continueCalculating) {
-            showMainMenu();
-            int choice = getValidChoice();
+    	while (continueCalculating) {
+    	    showMainMenu();
+    	    int choice = getValidChoice();
 
-            try {
-                if (choice == FAHRENHEIT_TO_CELSIUS) {
-                    convertFahrenheitToCelsius();
-                } else {
-                    convertCelsiusToFahrenheit();
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please enter a valid number.");
-                scan.nextLine(); // Clear the invalid input
-                continue;
-            }
+    	    if (choice == faherenheitToCelsius) {
+    	        convertFahrenheitToCelsius();
+    	    } else {
+    	        convertCelsiusToFahrenheit();
+    	    }
 
             System.out.println("Do you want to calculate again? (yes/no)");
-            continueCalculating = wantToContinue();
+            continueCalculating = wantContinue();
         }
 
         System.out.println("Thank you for using the temperature calculator");
@@ -45,30 +38,49 @@ public class NewTemperatureCalculator {
         while (true) {
             if (scan.hasNextInt()) {
             	int choice = scan.nextInt();
-                if (choice == FAHRENHEIT_TO_CELSIUS) {
+                if (choice == faherenheitToCelsius) {
                     return choice;
                 } else {
-                    if (choice == CELSIUS_TO_FAHRENHEIT) {
+                    if (choice == celsiusToFaherenheit) {
                         return choice;
                     }
                 }
             } else {
-                scan.next(); // Consume invalid input
+                scan.next(); 
             }
             System.out.println("Invalid choice. Please enter 1 or 2.");
         }
     }
 
     static void convertFahrenheitToCelsius() {
-        System.out.print("Enter Fahrenheit value: ");
-        double fahrenheit = scan.nextDouble();
+        double fahrenheit;
+        while (true) {
+            System.out.print("Enter Fahrenheit value: ");
+            try {
+                fahrenheit = scan.nextDouble();
+                break;  
+                
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                scan.nextLine();  
+            }
+        }
         double celsius = fahrenheitToCelsius(fahrenheit);
         System.out.printf("%.1f°F is %.1f°C%n", fahrenheit, celsius);
     }
 
     static void convertCelsiusToFahrenheit() {
-        System.out.print("Enter Celsius value: ");
-        double celsius = scan.nextDouble();
+    	double celsius;
+    	while (true) {
+    		System.out.print("Enter Celsius value: ");
+    		try {
+    			celsius = scan.nextDouble();
+    			break;
+    		} catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                scan.nextLine();  
+    		}
+    	}
         double fahrenheit = celsiusToFahrenheit(celsius);
         System.out.printf("%.1f°C is %.1f°F%n", celsius, fahrenheit);
     }
@@ -82,10 +94,10 @@ public class NewTemperatureCalculator {
     }
 
     static double round(double value) {
-        return Math.round(value * ROUNDING_FACTOR) / ROUNDING_FACTOR;
+        return Math.round(value * roundingFactor) / roundingFactor;
     }
 
-    static boolean wantToContinue() {
+    static boolean wantContinue() {
         while (true) {
             String input = scan.next().toLowerCase();
             if (input.equals("yes")) return true;
